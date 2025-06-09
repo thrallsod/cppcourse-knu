@@ -24,7 +24,7 @@ void read(const int* a) {
     [[maybe_unused]] int val = *a;
 }
 void read(int const & a) {
-    [[maybe_unused]] int val = a = 2;
+    [[maybe_unused]] int val = a /* = 2 */; // заборонено присвоєння, якщо аргумент const
 }
 
 struct Test {
@@ -40,18 +40,18 @@ int main() {
     // try pointer to constant
     int a = 1, b = 2;
     int const *i = &a;
-    *i = 5;
+    // *i = 5; // не можна змінювати значення через вказівник на const
     i = &b;
 
     // try constant pointer
     int * const j = &a;
     *j = 5;
-    j = &b;
+    // j = &b; // j є const-вказівником, не можна переназначити
 
     // try constant pointer to constant
     int const * const k = &a;
-    *k = 5;
-    k = &b;
+    // *k = 5; // значення за адресою не можна змінити
+    // k = &b; // не можна переназначити const-вказівник
 
     // try constant arguments of functions
     int l = 0;
@@ -66,7 +66,7 @@ int main() {
       int *p = &a;
       const int *r = &b;
       write(p);
-      write(r);
+      // write(r); // write приймає int*, але r є const int*
       read(p);
       read(r);
     }
@@ -75,9 +75,9 @@ int main() {
     {
       int p = 0;
       const int r = 0;
-      write(2);
-      write(r);
-      read(2);
+      // write(2); // не можна створити неконстантне посилання на тимчасове значення
+      // write(r); // write приймає посилання на int, але r є const
+      // read(2); // не можна створити посилання на тимчасове значення з const int&
       read(r);
     }
 
@@ -86,7 +86,7 @@ int main() {
     const Test tc;
     std::string s("World");
     t.hello(s);
-    tc.hello(s);
+    // tc.hello(s); // метод hello не є const, не можна викликати на const-об'єкті
     t.helloConst(s);
     tc.helloConst(s);
 

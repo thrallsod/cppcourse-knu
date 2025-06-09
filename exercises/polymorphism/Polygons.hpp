@@ -3,7 +3,7 @@
 class RegularPolygon {
 public:
     RegularPolygon(int n, float radius);
-    float computePerimeter() const;
+    virtual float computePerimeter() const;
 protected:
     int m_nbSides;
     float m_radius;

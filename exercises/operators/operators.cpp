@@ -3,10 +3,70 @@
 #include <numeric>
 
 class Fraction {
- public:
-  // TODO: constructors and operators
+public:
+  Fraction(unsigned int num, unsigned int denom)
+      : m_num(num), m_denom(denom) {
+    normalize();
+  }
 
- private:
+  Fraction(unsigned int num) : m_num(num), m_denom(1) {}
+
+  Fraction& operator*=(const Fraction& other) {
+    m_num *= other.m_num;
+    m_denom *= other.m_denom;
+    normalize();
+    return *this;
+  }
+
+  Fraction& operator*=(int value) {
+    m_num *= value;
+    normalize();
+    return *this;
+  }
+
+  bool operator==(const Fraction& other) const {
+    return m_num == other.m_num && m_denom == other.m_denom;
+  }
+
+  bool operator<(const Fraction& other) const {
+    return m_num * other.m_denom < other.m_num * m_denom;
+  }
+
+  friend std::ostream& operator<<(std::ostream& os, const Fraction& f) {
+    return os << f.m_num << "/" << f.m_denom;
+  }
+
+  friend bool operator!=(const Fraction& a, const Fraction& b) {
+    return !(a == b);
+  }
+
+  friend bool operator<=(const Fraction& a, const Fraction& b) {
+    return a < b || a == b;
+  }
+
+  friend bool operator>=(const Fraction& a, const Fraction& b) {
+    return !(a < b);
+  }
+
+  friend bool operator>(const Fraction& a, const Fraction& b) {
+    return b < a;
+  }
+
+  friend Fraction operator*(Fraction lhs, const Fraction& rhs) {
+    lhs *= rhs;
+    return lhs;
+  }
+
+  friend Fraction operator*(Fraction lhs, int value) {
+    lhs *= value;
+    return lhs;
+  }
+
+  friend Fraction operator*(int value, const Fraction& rhs) {
+    return rhs * value;
+  }
+
+private:
   void normalize() {
     const int gcd = std::gcd(m_num, m_denom);
     m_num /= gcd;
@@ -15,9 +75,6 @@ class Fraction {
 
   unsigned int m_num, m_denom;
 };
-
-// TODO: operators
-
 
 void printAndCheck(std::string const & what, Fraction const & result, Fraction const & expected) {
   const bool passed = result == expected;

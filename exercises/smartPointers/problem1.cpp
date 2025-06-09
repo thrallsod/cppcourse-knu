@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <array>
+#include <memory>
 
 
 /* --------------------------------------------------------------------------------------------
@@ -53,7 +54,7 @@ void doStuff() {
 
     // MAKE YOUR CHANGES IN THIS FUNCTION
 
-    auto obj = new LargeObject ;
+    auto obj = std::make_unique<LargeObject>();
     changeLargeObject(*obj) ;
     delete obj ;
 
